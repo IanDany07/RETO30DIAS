@@ -11,6 +11,7 @@ test('usuarios', async({page})=>{
     //page.getByRole('link',{name:'Menu'}) = localizador
     await page.getByRole('link',{name:'Admin'}).click()
     //getBytext=encontra elemento por texto (User managment) dentro del elemento (topbar Menu)
+    //osea: getBytext (Permite localizar elementos que contienen un texto determinado)
     await page.getByRole('navigation',{name:'Topbar Menu'}).getByText('User Management').click()
     await page.getByRole('menuitem',{name:'Users'}).click()
 
@@ -42,11 +43,33 @@ test('usuarios', async({page})=>{
             //si el texto no viene nullo, entonces agregalo a usernames desde username=texto capturado
             usernames.push(username)
         }
-
      }
     //imprime todo los usuarios de la interface grafica
     console.log(usernames)
-     
-    //EL RETO ES DE CREAR UN NUEVO SCRIP DONDE DEVOLVEMOS LOS NOMNBRES DE LOS EMPLEADOS
+})
 
+//EL RETO ES DE CREAR UN NUEVO SCRIP DONDE DEVOLVEMOS LOS NOMNBRES DE LOS EMPLEADOS
+
+test('nombre de usuario', async({page})=>{
+    await page.goto('https://opensource-demo.orangehrmlive.com/')
+    await page.getByRole('textbox',{name:'Username'}).fill('admin')
+    await page.getByRole('textbox',{name:'Password'}).fill('admin123')
+    await page.getByRole('button',{name:'Login'}).click()
+
+    await expect(page.getByRole('link',{name:'Admin'})).toBeVisible()
+    await page.getByRole('link',{name:'Admin'}).click()
+    await page.getByRole('navigation',{name:'Topbar Menu'}).getByText('User Management').click()
+    await page.getByRole('menuitem',{name:'Users'}).click()
+
+    const filas = page.getByRole('table').getByRole('row')
+    const nombreusuarios: string[]=[]
+    const contadorfila = await filas.count()
+    for(let i=1; i < contadorfila; i++){
+        const celdacolumna = filas.nth(i).getByRole('cell').nth(3)
+        const nombreusuario = await celdacolumna.textContent()
+        if (nombreusuario){
+            nombreusuarios.push(nombreusuario)
+        }
+    }
+    console.log(nombreusuarios)
 })
