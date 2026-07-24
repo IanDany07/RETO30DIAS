@@ -32,7 +32,7 @@ test('usuarios', async({page})=>{
         // para acceder a la fila. // con nth accedo a un elemento que es (rows)
         // entonces, en la 1era iteracion accedo a la fila 2.
         //Dentro de rows existe varias cell. (nth es la clave)-> cell es el nombre del rol de la subfila
-        //nth(1) es la segunda columna de la tabla.
+        //nth(1) es la segunda columna de la tabla. // "cell=celda" es propio del playwright
         const cell=rows.nth(i).getByRole('cell').nth(1)
         // el indice empieza en cero. El TextContent es un metodo para capturar el texto. Puede capturar un texto o puede ser nulo
         // -> el texto capturado lo tenemos que agregarlo al arreglo (usernames)
