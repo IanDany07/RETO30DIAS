@@ -73,3 +73,24 @@ test('nombre de usuario', async({page})=>{
     }
     console.log(nombreusuarios)
 })
+
+// DIA 6: Editar usuario: sus datos, verificar que cuando hacemos clic en editar, sea el mismo nombre que se ha visualizado desde la vista del usuario
+
+test('editar nombre de usuario', async({page})=>{
+    const usuarioEditable ='balajimx85'
+    await page.goto('https://opensource-demo.orangehrmlive.com/')
+    await page.getByRole('textbox',{name:'Username'}).fill('admin')
+    await page.getByRole('textbox',{name:'Password'}).fill('admin123')
+    await page.getByRole('button',{name:'Login'}).click()
+
+    await expect(page.getByRole('link',{name:'Admin'})).toBeVisible()
+    await page.getByRole('link',{name:'Admin'}).click()
+    await page.getByRole('navigation',{name:'Topbar Menu'}).getByText('User Management').click()
+    await page.getByRole('menuitem',{name:'Users'}).click()
+    // filter: filtramos por valor: de toda la fila filtrar el usuario 'usuarioEditable'/ 
+    // de ese boton entregame aquel que dentro tenga un 'i' con la clase 'bi-pencil-fill'
+    const FiltrarFilaUsuario = page.getByRole('table').getByRole('row').filter({hasText:usuarioEditable}).locator('button').filter({has: page.locator('i.bi-pencil-fill')})
+
+    await FiltrarFilaUsuario.click()
+    console.log('el usurio a editar es:',usuarioEditable)
+})
