@@ -114,7 +114,7 @@ test('regresar a la pagina principal', async({page})=>{
 
 })
 
-// RETO DIA 5: Desde el menu Admin. Crear una expectativa, cuando se realice un clic en el sub menu de Qualificacion, abre la pagina y se muestra su URL, 
+// DIA 5: Desde el menu Admin. Crear una expectativa, cuando se realice un clic en el sub menu de Qualificacion, abre la pagina y se muestra su URL, 
 // luego, cierra la pagina para volver a seleccionar otra sub menu. 
 
 test ('navegar por el sub menu', async ({page})=>{
@@ -168,4 +168,47 @@ test ('navegar por el sub menu', async ({page})=>{
     }
 })
 
-// RETO DIA 5: H
+// RETO DIA 5: realizar una expectativa con otros menus.
+test('Navegar menu con expectativa', async ({page})=>{
+    test.setTimeout(120000)
+    const expectivapaginas1 = [
+        { menu:'General Information', url:'/web/index.php/admin/viewOrganizationGeneralInformation'
+        },
+        { menu:'Location', url:'/web/index.php/admin/viewLocations'
+        },
+        { menu:'Structure', url:'/web/index.php/admin/viewCompanyStructure'
+        },
+    ]
+    
+
+    await page.goto('https://opensource-demo.orangehrmlive.com')
+    await page.getByRole('textbox',{name: 'Username'}).fill('Admin')
+    await page.getByRole('textbox',{name: 'Password'}).fill('admin123')
+    await page.getByRole('button',{name: 'Login'}).click()
+
+    await expect(page.getByRole('link',{name:'Admin'})).toBeVisible()
+    await page.getByRole('link',{name:'Admin'}).click()
+
+    await page.getByRole('navigation',{name:'Topbar Menu'}).getByText('Organization').click()
+    const capmenu2= page.getByRole('menu').locator('li')
+
+    // for..of: recorre todo los elementos de la lista expectivapaginas1: osea, 
+    // para cada PaginaEsperada que esta dentro de expectivapaginas1, has lo siguiente:
+    for(let PaginaEsperada of expectivapaginas1){
+        const capmenu4 = capmenu2.filter({hasText:PaginaEsperada.menu})
+        await capmenu4.click()
+        console.log('Estamos en el menu:', capmenu4)
+
+        await expect(page).toHaveURL(new RegExp(PaginaEsperada.url))
+        await page.getByRole('navigation',{name:'Topbar Menu'}).getByText('Organization').click()
+
+    }
+
+
+
+
+
+}
+
+
+)
