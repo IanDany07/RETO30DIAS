@@ -77,6 +77,7 @@ test('nombre de usuario', async({page})=>{
 // DIA 6: Editar usuario: sus datos, verificar que cuando hacemos clic en editar, sea el mismo nombre que se ha visualizado desde la vista del usuario
 
 test('editar nombre de usuario', async({page})=>{
+    test.setTimeout(120000)
     const usuarioEditable ='balajimx85'
     await page.goto('https://opensource-demo.orangehrmlive.com/')
     await page.getByRole('textbox',{name:'Username'}).fill('admin')
@@ -93,4 +94,15 @@ test('editar nombre de usuario', async({page})=>{
 
     await FiltrarFilaUsuario.click()
     console.log('el usurio a editar es:',usuarioEditable)
+    // dentro del input no se visualiza ningun texto, como usuario si se puede ver (nombre del usuario), pero dentro del elemento (DOM -inspector), no
+    // -> necesitamos sacar el valor del username (nombre usuario) y comparar con el elemento de la Tabla -> entonces aplicamos una tecnica no tan ortodoxas (Web no tan modernas)
+    // elcodigo: //label[contains(., 'Username')]..: lo sacamos desde la pagina, ya que no tiene rol, nombre. 
+    // inputvalue, es para sacar el valor.
+    const currentnombreusuario = await page.locator("//label[contains(., 'Username')]/parent::div/following-sibling::div/input").inputValue()
+
+    expect(currentnombreusuario).toEqual(usuarioEditable)
+    // otra assertion (afirmacion), similar al primer expect-> es la mas aconsejada por playwright
+    expect(page.locator("//label[contains(., 'Username')]/parent::div/following-sibling::div/input")).toHaveValue(currentnombreusuario)
 })
+
+// Reto dia 6:
