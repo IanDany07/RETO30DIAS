@@ -75,7 +75,7 @@ test('Navegar en los menus', async ({page})=>{
 
 test('regresar a la pagina principal', async({page})=>{
     test.setTimeout(120000)
-    await page.goto('https://opensource-demo.orangehrmlive.com/web')
+    await page.goto('https://opensource-demo.orangehrmlive.com')
     await page.getByRole('textbox',{name: 'Username'}).fill('Admin')
     await page.getByRole('textbox',{name: 'Password'}).fill('admin123')
     await page.getByRole('button',{name: 'Login'}).click()
@@ -113,3 +113,59 @@ test('regresar a la pagina principal', async({page})=>{
     }
 
 })
+
+// RETO DIA 5: Desde el menu Admin. Crear una expectativa, cuando se realice un clic en el sub menu de Qualificacion, abre la pagina y se muestra su URL, 
+// luego, cierra la pagina para volver a seleccionar otra sub menu. 
+
+test ('navegar por el sub menu', async ({page})=>{
+    test.setTimeout(120000)
+
+    // Definimos la expectiva. Realizamos un arreglo. Agregamos la url que esperamos q aparesca cuando hacemos clic
+    const expectativapaginas =[
+
+        {
+            menu: 'Skills', 
+            url:'/web/index.php/admin/viewSkills'
+        },
+        {
+            menu: 'Education', 
+            url:'/web/index.php/admin/viewEducation'
+        },
+        {
+            menu: 'Licenses', 
+            url:'/web/index.php/admin/viewLicenses'
+        },
+    ]
+    await page.goto('https://opensource-demo.orangehrmlive.com')
+    await page.getByRole('textbox',{name: 'Username'}).fill('Admin')
+    await page.getByRole('textbox',{name: 'Password'}).fill('admin123')
+    await page.getByRole('button',{name: 'Login'}).click()
+
+    await expect(page.getByRole('link',{name:'Admin'})).toBeVisible()
+    await page.getByRole('link',{name:'Admin'}).click()
+    
+    await page.getByRole('navigation',{name:'Topbar Menu'}).getByText('Qualifications').click()
+    // desde el 'menu' dame todo los 'Li' que tiene, y almacenamos toda la lista
+    const capMenuCalificacion = page.getByRole('menu').locator('li')
+
+    // Ahora, iterar sobre la expectativa. Yo espero las paginas: Skill, Education, etc
+    for( let expectedPage of expectativapaginas){
+        // todo lo que ha capturado, filtrarme por un texto. 
+        const menuopcion = capMenuCalificacion.filter({hasText: expectedPage.menu})
+        await menuopcion.click()
+        
+        //expect(page).toHaveURL: espero que la pagina tenga una url:
+        //toHaveURL: epera que la pagina tenga un url especica (en un cierto tiempo)
+        //toHaveURL: valida toda la url:https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewLicenses
+        //await expect(page).toHaveURL(expectedPage.url)
+
+        //new RegExp: valida solo una porcion de la url:../web/index.php/admin/viewLicenses -> hace clic y aparece la URL
+        await expect(page).toHaveURL(new RegExp(expectedPage.url))
+
+        //para que vuelva abrir el menu despues de hacer clic en caulquier menu.
+        await page.getByRole('navigation',{name:'Topbar Menu'}).getByText('Qualifications').click()
+        
+    }
+})
+
+// RETO DIA 5: H
