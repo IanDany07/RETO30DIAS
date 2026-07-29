@@ -1,10 +1,16 @@
 import {expect, test} from '@playwright/test'
+import { LoginPage} from './ObjetosPagina/loginPagina'
 
 test('usuarios', async({page})=>{
-    await page.goto('https://opensource-demo.orangehrmlive.com')
-    await page.getByRole('textbox',{name:'username'}).fill('Admin')
-    await page.getByRole('textbox',{name:'password'}).fill('admin123')
-    await page.getByRole('button',{name:'Login'}).click()
+    // dia 7: vamos a refactorizar este login
+    //await page.goto('https://opensource-demo.orangehrmlive.com')
+    //await page.getByRole('textbox',{name:'username'}).fill('Admin')
+    //await page.getByRole('textbox',{name:'password'}).fill('admin123')
+    //await page.getByRole('button',{name:'Login'}).click()
+    
+    //Aqui ya hemos refactorizado el login 
+    const loginPage = new LoginPage(page)
+    await loginPage.doLogin('Admin','admin123')
     
     //para validar que estemos dentro de la pagina ver el menu Admin
     await expect(page.getByRole('link',{name:'Admin'})).toBeVisible()
@@ -105,4 +111,4 @@ test('editar nombre de usuario', async({page})=>{
     expect(page.locator("//label[contains(., 'Username')]/parent::div/following-sibling::div/input")).toHaveValue(currentnombreusuario)
 })
 
-// Reto dia 6:
+// Reto dia 6: hacer una funcion que seleccione demanera aleatoria los usuarios, excepto el usuario admin.

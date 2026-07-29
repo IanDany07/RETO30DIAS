@@ -12,3 +12,5 @@ test('Login demo', async({page}) => {
     //RETO: automatizar el login fallido
 
 })
+
+// Dia 7: refactorizar la funcion Login

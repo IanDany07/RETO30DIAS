@@ -28,6 +28,9 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 
+    //se ha definido esta URL en la clase dia 7 - refactorizacion: aqui definimos una URL base
+    baseURL:'https://opensource-demo.orangehrmlive.com',
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     launchOptions:{
