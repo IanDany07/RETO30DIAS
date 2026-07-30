@@ -29,6 +29,7 @@ export default defineConfig({
     // baseURL: 'http://localhost:3000',
 
     //se ha definido esta URL en la clase dia 7 - refactorizacion: aqui definimos una URL base
+    //URL base que se utilizará en acciones como `await page.goto('')
     baseURL:'https://opensource-demo.orangehrmlive.com',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */

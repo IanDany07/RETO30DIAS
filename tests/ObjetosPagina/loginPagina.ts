@@ -17,6 +17,7 @@ export class LoginPage{
     }
     //aqui creamos el metodo(doLogin) con las variables (username y password). Navegamos(url) y llenamos los campos(usernamey password) y hacemos clic
     async doLogin(usermame: string, Password: string){
+        // aqui en .goto: se ha creado una URL Base en el ..config.ts
     await this.page.goto('web/index.php/auth/login')
     await this.usernameInput.fill(usermame)
     await this.passwordInput.fill(Password)
