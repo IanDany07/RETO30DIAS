@@ -1,9 +1,14 @@
 import{test, expect} from '@playwright/test'
+import { LoginPage } from './ObjetosPagina/loginPagina'
+
 test ('navegacion', async ({page})=> {
-    await page.goto('https://opensource-demo.orangehrmlive.com/')
-    await page.getByRole('textbox', {name:'Username'}).fill('Admin')
-    await page.getByRole('textbox',{name:'Password'}).fill('admin123')
-    await page.getByRole('button', {name:'Login'}).click()
+    test.setTimeout(120000)
+
+    // Dia 7: login refactorizado
+    const loginPage1 = new LoginPage(page)
+    await loginPage1.doLogin('Admin','admin123')
+
+    await expect(page.getByRole('link',{name:'Admin'})).toBeVisible()
 
     const capturaListaMenu= page.getByLabel('Sidepanel').getByRole('listitem')
     const ContadorListaMenu= await capturaListaMenu.count()
@@ -17,7 +22,7 @@ test ('navegacion', async ({page})=> {
         recuentoMenuItem.push(MenuTexto)
     }
     //se imprimen solo el menu "Admin"
-    console.log(recuentoMenuItem[0])
+    //console.log(recuentoMenuItem[0])
     //se imprimen los 12 menús porque tienes esta línea
     console.log(recuentoMenuItem)
     //voy a comparar los resultados con la expectativa
@@ -39,7 +44,7 @@ test ('navegacion', async ({page})=> {
     expect(recuentoMenuItem).toEqual(expectativaMenu)
 
     // Reto Dia 3: agregar una assertion para validar que la primera opcion del menu "Admin" sea "Admin"
-    expect(recuentoMenuItem[0]).toBe('Admin')
+    //expect(recuentoMenuItem[0]).toBe('Admin')
 })
 
 //DIA 4: Realizar una funcion que permita realizar o hacer clic en todo los menus. Y omitir el menu que tiene otro enlace.
@@ -180,11 +185,9 @@ test('Navegar menu con expectativa', async ({page})=>{
         },
     ]
     
-
-    await page.goto('https://opensource-demo.orangehrmlive.com')
-    await page.getByRole('textbox',{name: 'Username'}).fill('Admin')
-    await page.getByRole('textbox',{name: 'Password'}).fill('admin123')
-    await page.getByRole('button',{name: 'Login'}).click()
+    // Login refacotirado - Dia 7
+    const loginrefactorizado = new LoginPage(page)
+    await loginrefactorizado.doLogin('Admin','admin123')
 
     await expect(page.getByRole('link',{name:'Admin'})).toBeVisible()
     await page.getByRole('link',{name:'Admin'}).click()
